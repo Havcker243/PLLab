@@ -1,1 +1,1 @@
-42
+((fun (mainx x) (+ x 1)) (mainx 41))

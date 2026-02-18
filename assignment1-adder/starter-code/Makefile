@@ -18,11 +18,19 @@ clean:
 	rm -f test/*.s test/*.run runtime/*.o runtime/*.a
 
 # Run all tests
-test: test/37.run test/add.run test/negate.run test/complex.run
+test: test/37.run test/add.run test/add1.run test/negate.run test/negate_nested.run test/complex.run test/sub1.run test/mix.run test/zero.run test/big.run test/num.run test/example.run
 	@echo "Running tests..."
 	@./test/37.run
 	@./test/add.run
+	@./test/add1.run
 	@./test/negate.run
+	@./test/negate_nested.run
 	@./test/complex.run
+	@./test/sub1.run
+	@./test/mix.run
+	@./test/zero.run
+	@./test/big.run
+	@./test/num.run
+	@./test/example.run
 
 .PHONY: clean test

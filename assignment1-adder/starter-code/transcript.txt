@@ -1,0 +1,15 @@
+$ cat test/37.snek
+37
+$ make test/37.run
+cargo run -- test/37.snek test/37.s
+   Compiling sexp v1.1.4
+   Compiling adder v0.1.0 (/mnt/c/Users/dolap/Desktop/Projects/SpringProject/CSCI282L-2026SPRING/assignment1-adder/starter-code)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.73s
+     Running `target/debug/adder test/37.snek test/37.s`
+nasm -f elf64 test/37.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/37.run
+rm test/37.s
+
+$ cat test/37.s
+cat: test/37.s: No such file or directory

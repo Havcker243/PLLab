@@ -1,0 +1,1 @@
+((fun (use_input x) (+ x 2)) (use_input input))
