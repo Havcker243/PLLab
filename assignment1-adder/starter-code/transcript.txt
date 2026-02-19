@@ -4,12 +4,256 @@ $ make test/37.run
 cargo run -- test/37.snek test/37.s
    Compiling sexp v1.1.4
    Compiling adder v0.1.0 (/mnt/c/Users/dolap/Desktop/Projects/SpringProject/CSCI282L-2026SPRING/assignment1-adder/starter-code)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.73s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.87s
      Running `target/debug/adder test/37.snek test/37.s`
 nasm -f elf64 test/37.s -o runtime/our_code.o
 ar rcs runtime/libour_code.a runtime/our_code.o
 rustc -L runtime/ runtime/start.rs -o test/37.run
-rm test/37.s
 
 $ cat test/37.s
-cat: test/37.s: No such file or directory
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 37
+  ret
+
+$ ./test/37.run
+37
+
+$ cat test/add.snek
+(add1 (add1 5))
+$ make test/add.run
+cargo run -- test/add.snek test/add.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/adder test/add.snek test/add.s`
+nasm -f elf64 test/add.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/add.run
+
+$ cat test/add.s
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 5
+add rax, 1
+add rax, 1
+  ret
+
+$ ./test/add.run
+7
+
+$ cat test/add1.snek
+(add1 5)
+
+$ make test/add1.run
+cargo run -- test/add1.snek test/add1.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/adder test/add1.snek test/add1.s`
+nasm -f elf64 test/add1.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/add1.run
+
+$ cat test/add1.s
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 5
+add rax, 1
+  ret
+
+$ ./test/add1.run
+6
+
+$ cat test/negate.snek
+(negate 7)
+
+$ make test/negate.run
+cargo run -- test/negate.snek test/negate.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/adder test/negate.snek test/negate.s`
+nasm -f elf64 test/negate.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/negate.run
+
+$ cat test/negate.s
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 7
+imul rax, -1
+  ret
+
+$ ./test/negate.run
+-7
+
+$ cat test/negate_nested.snek
+(negate (add1 3))
+$ make test/negate_nested.run
+cargo run -- test/negate_nested.snek test/negate_nested.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/adder test/negate_nested.snek test/negate_nested.s`
+nasm -f elf64 test/negate_nested.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/negate_nested.run
+
+$ cat test/negate_nested.s
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 3
+add rax, 1
+imul rax, -1
+  ret
+
+$ ./test/negate_nested.run
+-4
+
+$ cat test/complex.snek
+(sub1 (sub1 (add1 73)))
+$ make test/complex.run
+cargo run -- test/complex.snek test/complex.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/adder test/complex.snek test/complex.s`
+nasm -f elf64 test/complex.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/complex.run
+
+$ cat test/complex.s
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 73
+add rax, 1
+sub rax, 1
+sub rax, 1
+  ret
+
+$ ./test/complex.run
+72
+
+$ cat test/sub1.snek
+(sub1 0)
+$ make test/sub1.run
+cargo run -- test/sub1.snek test/sub1.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.11s
+     Running `target/debug/adder test/sub1.snek test/sub1.s`
+nasm -f elf64 test/sub1.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/sub1.run
+
+$ cat test/sub1.s
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 0
+sub rax, 1
+  ret
+
+$ ./test/sub1.run
+-1
+
+$ cat test/mix.snek
+(add1 (negate (sub1 10)))
+$ make test/mix.run
+cargo run -- test/mix.snek test/mix.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/adder test/mix.snek test/mix.s`
+nasm -f elf64 test/mix.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/mix.run
+
+$ cat test/mix.s
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 10
+sub rax, 1
+imul rax, -1
+add rax, 1
+  ret
+
+$ ./test/mix.run
+-8
+
+$ cat test/zero.snek
+0
+$ make test/zero.run
+cargo run -- test/zero.snek test/zero.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/adder test/zero.snek test/zero.s`
+nasm -f elf64 test/zero.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/zero.run
+
+$ cat test/zero.s
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 0
+  ret
+
+$ ./test/zero.run
+0
+
+$ cat test/big.snek
+2147483647
+$ make test/big.run
+cargo run -- test/big.snek test/big.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.11s
+     Running `target/debug/adder test/big.snek test/big.s`
+nasm -f elf64 test/big.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/big.run
+
+$ cat test/big.s
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 2147483647
+  ret
+
+$ ./test/big.run
+2147483647
+
+$ cat test/num.snek
+37
+
+$ make test/num.run
+cargo run -- test/num.snek test/num.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running `target/debug/adder test/num.snek test/num.s`
+nasm -f elf64 test/num.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/num.run
+
+$ cat test/num.s
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 37
+  ret
+
+$ ./test/num.run
+37
+
+$ cat test/example.snek
+42
+
+$ make test/example.run
+cargo run -- test/example.snek test/example.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/adder test/example.snek test/example.s`
+nasm -f elf64 test/example.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/example.run
+
+$ cat test/example.s
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 42
+  ret
+
+$ ./test/example.run
+42
+

@@ -1,6 +1,9 @@
 # Makefile for Adder Compiler
 # Replace 'elf64' with 'macho64' on macOS
 
+# Keep generated intermediate files so transcript generation can cat them.
+.SECONDARY:
+
 # Pattern rule to compile .snek files to .s assembly files
 test/%.s: test/%.snek src/main.rs
 	cargo run -- $< test/$*.s
